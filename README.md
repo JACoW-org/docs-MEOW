@@ -1,6 +1,6 @@
-# IPAC Documentation
+# MEOW Documentation
 
-This documentation can be consulted at [IPAC-docs.JACoW.org](https://IPAC-docs.JACoW.org). It is generated from
+This documentation can be consulted at [MEOW-docs.JACoW.org](https://MEOW-docs.JACoW.org). It is generated from
 Markdown files using [MkDocs](http://www.mkdocs.org/) and
 [Material for MkDocs](http://squidfunk.github.io/mkdocs-material/).
 
