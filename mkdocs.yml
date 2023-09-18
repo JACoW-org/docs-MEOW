@@ -1,6 +1,6 @@
 site_name: JACoW - CAT - MEOW
 theme: material
-repo_name: 'jacow-org/docs-IPAC'
+repo_name: 'jacow-org/docs-MEOW'
 repo_url: 'https://github.com/JACoW-org/docs-MEOW'
 nav:
   - Introduction: index.md
