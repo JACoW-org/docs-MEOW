@@ -1,0 +1,18 @@
+site_name: JACoW - CAT - MEOW
+theme: material
+repo_name: 'jacow-org/docs-IPAC'
+repo_url: 'https://github.com/JACoW-org/docs-MEOW'
+nav:
+  - Introduction: index.md
+  - Framework: framework.md
+  - API: api.md
+  - Events:
+    - Introduction: events/intro.md
+    - Abstract Booklet: events/abstractBooklet.md
+    - PDF check: events/pdfCheck.md
+    - Proceedings: events/proceedings.md
+    - Compress Proceedings: events/compress.md
+    - DOI: events/doi.md
+  - Tools:
+    - Jinja: tools/jinja.md
+    - Hugo: tools/hugo.md
