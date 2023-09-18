@@ -1,11 +1,19 @@
-MEOW is organized in two parts:
-- a web part 
-- a worker part
+MEOW consists of two software components:
 
-## Web
+- **MEOW webapp**, which serves as the Web Application Interface.
+- **MEOW worker**, which is the computational component.
 
-The web part is built with Starlette. 
+Communication between these two components occurs through Redis PUB/SUB channels.
 
-## Worker
+## MEOW Webapp
 
-The worker is built with async operations.
+The webapp component is responsible for providing a Web API that allows clients to:
+
+- Submit new tasks
+- Retrieve information about the progress status of tasks
+- Retrieve the results of a task
+- Obtain information about the assets produced by tasks
+
+## MEOW Worker
+
+The worker component offers a list of events and is responsible for initiating them, routing information about their progress and results, and reporting errors.
