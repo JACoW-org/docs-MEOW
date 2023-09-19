@@ -1,6 +1,6 @@
 # 
 
-![JACoW logo](https://www.jacow.org/pub/images/header.png)
+![JACoW logo](img/JACoW.png)
 
 This site hosts the documentation about the [**Machine Editor for cOnferences Website** (***MEOW***)](https://github.com/JACoW-org/MEOW).
 
