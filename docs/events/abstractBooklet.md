@@ -63,28 +63,24 @@ This task generates the body of the abstract booklet based on the settings. It c
 
 ##### Custom Fields
 
-You can include custom fields in the abstract booklet using the `custom_fields` setting. This setting lets you specify the names of custom fields you want to include in the booklet. The task checks for these fields in the contributions and adds them to the generated content.
+You can include custom fields in the abstract booklet using the `custom_fields` [settings](https://purr-docs.jacow.org/Functionalities/abstractBooklet/#custom-fields). This setting lets you specify the names of custom fields you want to include in the booklet. The task checks for these fields in the contributions and adds them to the generated content.
 
 ##### Document generation
 
 The task iterates through the session and contribution data and uses the configured [settings](https://purr-docs.jacow.org/Functionalities/abstractBooklet/#settings) to format the headers and content. Here's how it works:
 
 - For each session:
-  - It dynamically replaces placeholders in the session header templates (`ab_session_h1` and `ab_session_h2`) with actual session data (code, title, start, and end times).
-  - It creates bookmarks for easy reference and adds session chair information if available.
-  - It adds a black line for separation.
-  - It adds the session's description.
-  - If custom fields are specified, it includes them in the session content.
-
+    - It dynamically replaces placeholders in the session header templates (`ab_session_h1` and `ab_session_h2`) with actual session data (code, title, start, and end times).
+    - It creates bookmarks for easy reference and adds session chair information if available.
+    - It adds a blank line for separation.
+    - It adds the session's description.
 - For each contribution within a session:
-  - It dynamically replaces placeholders in the contribution header templates (`ab_contribution_h1` and `ab_contribution_h2`) with actual contribution data (code, title, start, and end times).
-  - It creates bookmarks for easy reference.
-  - It adds speaker, primary author, and coauthor information based on the configured styles.
-  - It includes a description of the contribution.
-  - If custom fields are specified, it includes them in the contribution content.
+    - It dynamically replaces placeholders in the contribution header templates (`ab_contribution_h1` and `ab_contribution_h2`) with actual contribution data (code, title, start, and end times).
+    - It creates bookmarks for easy reference.
+    - It adds speaker, primary author, and coauthor information based on the configured styles.
+    - It includes a description of the contribution.
+    - If custom fields are specified, it includes them in the contribution content.
 
 The task then returns the ODT document.
 
-
-
-In the end, the event serializes the generated ODT document into a file.
+In the end, the event serialises the generated ODT document into a file.
