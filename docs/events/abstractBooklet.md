@@ -67,7 +67,7 @@ You can include custom fields in the abstract booklet using the `custom_fields` 
 
 ##### Document generation
 
-The task iterates through the session and contribution data and uses the configured settings to format the headers and content. Here's how it works:
+The task iterates through the session and contribution data and uses the configured [settings](https://purr-docs.jacow.org/Functionalities/abstractBooklet/#settings) to format the headers and content. Here's how it works:
 
 - For each session:
   - It dynamically replaces placeholders in the session header templates (`ab_session_h1` and `ab_session_h2`) with actual session data (code, title, start, and end times).
