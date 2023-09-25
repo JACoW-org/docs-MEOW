@@ -30,13 +30,13 @@ The list is then returned by the task.
 
 ## Proceedings Data Object Creation
 
-This task builds a proceeding's object and then returns it. In particular, for each contribution, it updates the flag `is_included_in_pdf_check` to `True` if and only if that contribution has the `green` state in Indico.
+This task builds a proceeding's object and then returns it. In particular, for each contribution, it updates the flag `is_included_in_pdf_check` to `True` if and only if that contribution has the `green` or `yellow` state in Indico.
 
 ## Download of the Papers
 
 This task is responsible for downloading contribution papers associated with the proceedings data object. Here's an overview of what happens in this function:
 
-1. **Extracting Papers**: It extracts a list of `FileData` objects representing contribution papers whose contributions have the `green` state.
+1. **Extracting Papers**: It extracts a list of `FileData` objects representing contribution papers whose contributions have the `green` or `yellow` state.
 
 2. **Download**: For each file data, in parallel, a download subtask is started, that retrieves the PDF file and caches it.
 
@@ -46,7 +46,7 @@ Once all files have been downloaded, the task returns a list containing two subl
 
 This task operates on the previously created proceedings object. Here's an overview of what happens:
 
-1. **Paper Selection**: It builds a list of `ContributionPaperData` objects representing conference papers that meet the "green" state condition.
+1. **Paper Selection**: It builds a list of `ContributionPaperData` objects representing conference papers that meet the `green` or `yellow` state condition.
 
 2. **Papers Processing**: For each paper, a subtask is initiated to perform the following steps:
    
