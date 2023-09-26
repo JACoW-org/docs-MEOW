@@ -4,10 +4,10 @@ This event is responsible for compressing the previously generated proceedings w
 
 There are a total of two tasks to be executed, both with a lock on the database:
 
-1. [Adapting Final Proceedings](#adapting-final-proceedings)
+1. [Adapting Proceedings](#adapting-proceedings)
 2. [Compress Static Site](#compress-static-site)
 
-## Adapting Final Proceedings
+## Adapting Proceedings
 
 This task builds and returns a `ProceedingsData` object that includes all the conference information.
 
