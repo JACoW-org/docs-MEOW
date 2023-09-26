@@ -15,10 +15,10 @@ In the end, the event will return a list of dictionaries with metadata and error
 
 ## Sessions and Materials Collection
 
-This task collects sessions and attachments related to the conference based on the provided information. In summary, it starts two parallel subtasks:
+This task collects sessions and materials related to the conference based on the provided information. In summary, it starts two parallel subtasks:
 
 - `download_sessions`: Retrieves sessions related to the event from Indico and appends them to the `sessions` list.
-- `download_attachments`: Retrieves attachments associated with the event from Indico and appends them to the `attachments` list.
+- `download_materials`: Retrieves materials associated with the event from Indico and appends them to the `materials` list.
 
 The two lists are then returned by the task.
 

@@ -186,7 +186,7 @@ This task is responsible for concatenating the papers to create the following vo
 - "Proceedings at a Glance," which includes the first pages of all the papers. Each page also serves as a hypertextual link to the respective paper.
 - "Proceedings Volume," which includes all the papers of the conference.
 
-Both volumes may have a cover if added through the attachments, and a table of contents is generated based on the settings.
+Both volumes may have a cover if added through the materials, and a table of contents is generated based on the settings.
 
 To expedite the process, papers are divided into chunks (based on their page numbers) and concatenated in parallel.
 
@@ -208,7 +208,7 @@ Upon completion of this phase, all website pages will be found under the `var/ru
 
 This task is responsible for copying the PDF files retrieved in one of the previous tasks to the folder `var/run/{event_id}_src/static/pdf`. These assets are also necessary to build the final website. The subtasks are as follows:
 
-- `copy_event_attachments` for the attachments (excluding the covers).
+- `copy_event_materials` for the materials (excluding the covers).
 - `copy_contribution_papers` for the PDFs of the papers.
 - `copy_contribution_slides` for the slides of the contributions, but only for the final proceedings event.
 

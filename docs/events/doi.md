@@ -24,7 +24,7 @@ All the previous events follow the typical workflow of an event in MEOW, which i
 
 This set of tasks includes those responsible for building an instance of `ProceedingsData` object. It is common to all DOI events:
 
-- Retrieving data of sessions and attachments from Indico.
+- Retrieving data of sessions and materials from Indico.
 - Retrieving data of contributions from Indico.
 - Combining the data into a single `ProceedingsData` object.
 
