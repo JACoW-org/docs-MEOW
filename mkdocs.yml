@@ -16,3 +16,4 @@ nav:
   - Tools:
     - Jinja: tools/jinja.md
     - Hugo: tools/hugo.md
+    - Keywords Extraction: tools/keywords.md
