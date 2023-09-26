@@ -4,7 +4,7 @@ This event acquires a lock on the data before executing, renewing it after every
 
 Following is the list of exploited tasks:
 
-1. [Sessions and Attachments Collection](#sessions-and-attachments-collection)
+1. [Sessions and Materials Collection](#sessions-and-materials-collection)
 2. [Contributions Data Collection](#contributions-data-collection)
 3. [Proceedings Data Object Creation](#proceedings-data-object-creation)
 4. [Download of the Papers](#download-of-the-papers)
@@ -13,7 +13,7 @@ Following is the list of exploited tasks:
 
 In the end, the event will return a list of dictionaries with metadata and errors.
 
-## Sessions and Attachments Collection
+## Sessions and Materials Collection
 
 This task collects sessions and attachments related to the conference based on the provided information. In summary, it starts two parallel subtasks:
 

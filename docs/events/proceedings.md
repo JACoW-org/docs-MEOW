@@ -1,16 +1,25 @@
+## Filtering Function
+
+An important callback function is defined within the event function: `filter_published_contributions`. This function is employed to filter contributions, and the filtering process plays a crucial role in distinguishing between the generation of final and pre-press proceedings.
+
+Here's how the filtering of contributions differs:
+
+- For final proceedings, only contributions in the `green` state that have received QA approval are included.
+- For pre-press proceedings, only contributions in the `green` state are included.
+
 ## List of tasks
 
 This event acquires a lock on the data before executing, renewing it after every task is completed.
 
 Following is the list of tasks:
 
-1. [Sessions and Attachments Collection](#sessions-and-attachments-collection)
-2. [Contributions Collection](#contributions-data-collection)
-3. [Adapting Final Proceedings](#adapting-final-proceedings)
-4. [Clean Static Site](#clean-static-site)
-5. [Download Event Attachments](#)
-6. [Download Contributions Papers](#)
-7. [Download Contributions Slides](#download-contributions-slides)
+1. [Sessions and Materials Collection](#sessions-and-materials-collection)
+2. [Contributions Collection](#contributions-collection)
+3. [Proceedings Adapting](#proceedings-adapting)
+4. [Static Site Cleaning](#static-site-cleaning)
+5. [Conference Materials Download](#conference-materials-download)
+6. [Contribution Papers Download](#contribution-papers-download)
+7. [Contribution Slides Download](#contribution-slides-download)
 8. [Read Papers Metadata](#read-papers-metadata)
 9. [Validate Proceedings Data](#validate-proceedings-data)
 10. [Generate Contributions References](#generate-contributions-references)
@@ -22,55 +31,61 @@ Following is the list of tasks:
 16. [Concatenate Contributions Papers](#concatenate-contributions-papers)
 17. [Generate Site Pages](#generate-site-pages)
 18. [Copy Event PDFs](#copy-event-pdfs)
-19. [Generate Final Proceedings](#generate-final-proceedings)
+19. [Generate Proceedings](#generate-proceedings)
 20. [Link Static Site](#link-static-site)
 
-## Sessions and Attachments Collection
+## Sessions and Materials Collection
 
-This task retrieves data related to sessions and attachments from Indico and returns it to the main task. In the subtask responsible for downloading attachments, a filtering process is applied based on conference settings.
+This task is responsible for retrieving session and material data from Indico and providing it to the main task. Since a conference may contain more materials than necessary for the proceedings generation, the task filters the materials obtained from Indico, retaining only those specified in [PURR settings](https://purr-docs.jacow.org/Functionalities/finalProceedings/#materials).
 
 ## Contributions Collection
 
-This task retrieves data related to the conference's contributions from Indico and returns it to the main task. To retrieve the contributions, every session is iterated.
+This task collects contributions and files associated with a conference based on the provided information. In summary, it starts parallel subtasks `download_contributions` that retrieves the contributions from Indico and appends them to the `contributions` list. 
 
-## Adapting Final Proceedings
+The list is then returned by the task.
 
-In this task, we create an instance of the `ProceedingData` data class to which we refer as proceedings object. The included data is as follows:
+## Proceedings Adapting
 
-- **Editors**: These are retrieved and deserialized from the settings.
-- **Sessions**: These are deserialized from the previously retrieved sessions in a list of `SessionData` objects.
-- **Contributions**: These are deserialized from the previously retrieved contributions in a list of `ContributionData` objects.
-- **Attachments**: These are deserialized from the previously retrieved attachments in list of `AttachmentData` object.
+In this task, a proceedings object is constructed and subsequently returned. The primary objective of this task is to consolidate all the data into a single data structure and deserialize the data from the preceding tasks into the appropriate structures.
 
-Sessions are sorted by their starting datetime, and those without contributions are removed. Contributions are sorted by their session datetime, session code, and contribution code.
+Additionally, it updates the following flags for each contribution:
 
-Finally, the proceedings object is returned to the main task.
+- `is_included_in_proceedings` is set to `True` when the contribution is in the `green` state and has received `qa_approval`.
+- `is_included_in_prepress` is set to `True` when the contribution is in the `green` state.
 
-## Clean Static Site
+These flags serve as one of the primary distinctions between final and pre-press proceedings. Their values are utilized throughout the generation process to determine whether or not to include a contribution.
 
-This task removes all the previously generated folders for this specific conference from a prior main task run.
+## Static Site Cleaning
 
-## Download Event Attachments
+This task is responsible for cleaning up and removing temporary files and directories associated with the static site generation process of a previous run for this conference.
 
-This task retrieves files using the list of attachments from the proceedings object and stores them under `var/run/{event_id}_tmp`.
+## Conference Materials Download
 
-## Download Contributions Papers
+This task retrieves files using the list of materials from the proceedings object and stores them under a temporary folder.
 
-Initially, the task compiles a list of files to be retrieved by filtering publishable contributions that have a paper in their latest revision. Then, all the papers are retrieved from Indico using parallel subtasks and stored under `var/run/{event_id}_tmp`.
+## Contribution Papers Download
 
-## Download Contributions Slides
+This task is responsible for downloading contribution papers associated with the proceedings data object. Here's an overview of what happens in this function:
 
-This task is executed only for the generation of the final proceedings. Initially, the task compiles a list of files to be retrieved by filtering contributions that have slides in their latest revision. Then, all the files are retrieved from Indico using parallel subtasks and stored under `var/run/{event_id}_tmp`.
+1. **Extracting Papers**: After filtering the contributions using the filtering function, this task extracts a list of `FileData` objects that reference PDF papers in Indico.
+
+2. **Download**: For each file data, a download subtask is initiated in parallel to retrieve the PDF file and cache it.
+
+Once all files have been downloaded, the task returns a list containing two sublists: the first sublist contains the updated proceedings object, and the second sublist contains references to the downloaded PDFs.
+
+## Contribution Slides Download
+
+This task is executed only for the generation of the final proceedings. Initially, the task compiles a list of files to be retrieved by filtering contributions that have slides in their latest revision. Then, all the files are retrieved from Indico using parallel subtasks and stored under a temporary folder.
 
 ## Read Papers Metadata
 
-Initially, this task retrieves the list of papers for which metadata needs to be read.
+This task initially retrieves the list of papers for which metadata needs to be read.
 
-For each PDF file, the task retrieves the metadata, including keywords, fonts, page width and height, and the total number of pages.
+For each PDF file, the task fetches metadata, including keywords, fonts, page width, and height, along with the total number of pages.
 
 All the gathered information is then collected and returned.
 
-Finally, another subtask updates the proceeding object by iterating through the contributions and updating the following properties:
+Subsequently, another subtask updates the proceedings object by iterating through the contributions and updating the following properties:
 
 - Paper size (in bytes)
 - List of keywords
@@ -80,11 +95,13 @@ Finally, another subtask updates the proceeding object by iterating through the 
 
 ## Validate Proceedings Data
 
-This task is responsible for validating the data that has been collected so far and returning errors to the client. To achieve this, the metadata of each contribution that can be published is checked for the following criteria:
+This task is responsible for validating the data that has been collected thus far and returning errors to the client. To accomplish this, the metadata of each contribution is examined against the following criteria:
 
 - The page count is not null.
 - The paper's width and height are correct.
 - The paper's fonts are embedded.
+
+While errors do not obstruct the execution, they will be logged for the client's reference.
 
 ## Generate Contributions References
 
@@ -96,8 +113,30 @@ This task is responsible for generating references for the contributions. The fo
 - RIS
 - EndNote
 
-Initially, a `ContributionRef` object is constructed for each contribution. This model contains all the necessary data. Subsequently, XSLT files are utilized. For each format, there is a dedicated XSLT file capable of generating a string that contains the reference in the appropriate format. To do so, before applying the XSL transformation, a XML string of the `ContributionRef` object is generated, by using a Jinja template.
+The task builds a XML string for each contribution, that includes all the metadata that is needed to generate all the references. Subsequently, for each format, there is a dedicated XSLT file that is capable of building the reference string in the appropriate format. 
 Finally, the proceeding object is updated by incorporating the generated contribution references.
+
+### About XSLT
+
+XSLT is an acronym for **Extensible Stylesheet Language Transformations**. It is a language primarily used for transforming and rendering XML documents. XSLT is designed to convert XML data into various formats, such as HTML, plain text, or even other XML documents.
+
+Here is a list of key points about XSLT:
+
+- **Transformation**: XSLT is used to transform XML documents into other XML documents or different formats, defining rules for how the transformation should occur.
+
+- **Templates**: XSLT operates by applying templates, which are patterns that match elements or nodes in the source XML document. Templates specify how matched parts should be transformed in the output.
+
+- **XPath**: XPath is used within XSLT to navigate and select nodes within XML documents, allowing precise control over which parts should be transformed and how.
+
+- **Output Formatting**: XSLT lets you control the formatting of the output document, including specifying the structure, attributes, and data presentation.
+
+- **Recursive Processing**: XSLT supports recursive processing, enabling the same transformation logic to be applied to different sections of hierarchical XML data.
+
+- **Platform-Independent**: XSLT is platform-independent and widely supported by various programming languages and tools.
+
+- **Common Use Cases**: XSLT is commonly used for converting XML data into HTML for web display, generating reports, and transforming XML data for integration with other systems.
+
+XSLT is a valuable tool for transforming XML data into different formats, making it suitable for various web development, document processing, and data integration tasks.
 
 ## Generate DOIs
 
@@ -119,7 +158,7 @@ The same process is done also for conference's DOI payload.
 
 ## Manage Duplicates
 
-This task deals with contributions that have been marked as "duplicate_of." For these contributions, a `DuplicateContributionData` object is created, which contains information about the contribution to which the current one is a duplicate. This information includes the DOI URL and the dates of reception, revision, acceptance, and issuance.
+This task deals with contributions that have been marked as `duplicate_of`. For these contributions, a `DuplicateContributionData` object is created, which contains information about the contribution to which the current one is a duplicate. This information includes the DOI URL and the dates of reception, revision, acceptance, and issuance.
 
 ## Write Papers Metadata
 
@@ -173,7 +212,7 @@ This task is responsible for copying the PDF files retrieved in one of the previ
 - `copy_contribution_papers` for the PDFs of the papers.
 - `copy_contribution_slides` for the slides of the contributions, but only for the final proceedings event.
 
-## Generate Final Proceedings
+## Generate Proceedings
 
 Now that all the folders and files are in place, this task can run the command:
 
