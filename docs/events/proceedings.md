@@ -113,7 +113,7 @@ This task is responsible for generating references for the contributions. The fo
 - RIS
 - EndNote
 
-The task builds a XML string for each contribution, that includes all the metadata that is needed to generate all the references. Subsequently, for each format, there is a dedicated XSLT file that is capable of building the reference string in the appropriate format. 
+The task builds a XML string for each contribution, that includes all the metadata that is needed to generate all the references. Subsequently, for each format, there is a dedicated XSLT file that is capable of building the reference string in the appropriate format. You can find them [here](https://github.com/JACoW-org/MEOW/tree/master/xslt).
 Finally, the proceeding object is updated by incorporating the generated contribution references.
 
 ### About XSLT
