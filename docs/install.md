@@ -1,3 +1,27 @@
+## Server platform
+
+The following instructions refer to an Ubuntu 22.04 server and should be adapted with other package manager commands if a different distribution is chosen.
+
+## Notes on tools and versions
+
+### Python
+
+CAT is written in [Python](https://www.python.org/). At the moment of this deployment Indico officially supports Python versions 3.9 - 3.11, so CAT is based on Python 3.11.
+
+### Redis
+
+[Redis](https://redis.io/) is used as a communication database for all MEOW tasks. It can be installed in various ways. For simplicity, the official Ubuntu Redis packages are used in MEOW.
+
+### Supervisord
+
+[supervisord](http://supervisord.org) is used to manage the MEOW "service". It takes care of starting the MEOW processes and restart them if needed.
+
+### PDF tools
+
+[qpdf](https://qpdf.sourceforge.io/), [pdftk](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) and  [mupdf](https://mupdf.com) are used by MEOW to manipulate the PDFs for final proceedings.
+
+---
+
 ## Installing System Packages
 
 ```bash
@@ -8,37 +32,29 @@ apt install qpdf pdftk mupdf-tools mupdf
 apt install redis-server redis-tools
 ```
 
-## Enabling Redis Service
+## Enabling and starting the Redis Service
 
 ```bash
 systemctl enable redis
-```
-
-## Starting Redis Service
-
-```bash
 systemctl start redis
 ```
 
-## Creating CAT user
+## Setup MEOW code
+
+First, let's create the CAT user and access its working directory
 
 ```bash
 useradd --comment 'CAT system user' --create-home --system --home-dir /opt/cat --shell /usr/bin/bash cat
-```
-
-# Access to user home
-
-```bash
 su - cat
 ```
 
-# Downloading sources
+### Downloading sources
 
 ```bash
 git clone https://github.com/JACoW-org/MEOW.git
 ```
 
-# Setting Python Virtual Environment
+### Setting Python Virtual Environment
 
 ```bash
 python3 -m venv venv
@@ -47,20 +63,20 @@ python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt
 ```
 
-# Creating Authentication Key
+### Creating PURR/MEOW shared Authentication Key
 
 ```bash
 ./venv/bin/python -m meow auth -login purr@indico.jacow.org
 purr indico.jacow.org 01HBR3MMP09JVYZ7K3ATYPR00X
 ```
 
-# Starting supervisord
+### Starting supervisord
 
 ```bash
 ./venv/bin/supervisord -n -c ./conf/supervisord.conf
 ```
 
-# Ping Test
+## Test that MEOW is up and running
 
 ```bash
 curl http://127.0.0.1:8080/api/ping/01HBR3MMP09JVYZ7K3ATYPR00X
