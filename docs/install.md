@@ -65,7 +65,7 @@ python3 -m venv venv
 
 ### Creating PURR/MEOW Shared Authentication Key
 
-To create a shared authentication key for requests from the PURR client to the MEOW server, you will need an API key. The following command creates an API key for the user `purr`. You can create different keys for different users.
+To create a shared authentication key for requests from the PURR client to the MEOW server, you will need an API key. The following command creates an API key for the user `purr` and stores it in Redis. You can create different keys for different users.
 
 ```bash
 ./venv/bin/python -m meow auth -login purr@indico.jacow.org
