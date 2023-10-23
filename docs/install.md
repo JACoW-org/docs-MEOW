@@ -63,12 +63,22 @@ python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt
 ```
 
-### Creating PURR/MEOW shared Authentication Key
+### Creating PURR/MEOW Shared Authentication Key
+
+To create a shared authentication key for requests from the PURR client to the MEOW server, you will need an API key. The following command creates an API key for the user `purr`. You can create different keys for different users.
 
 ```bash
 ./venv/bin/python -m meow auth -login purr@indico.jacow.org
-purr indico.jacow.org 01HBR3MMP09JVYZ7K3ATYPR00X
 ```
+
+The output will look like this:
+
+```bash
+purr indico.jacow.org <api_key>
+```
+
+The API is used in PURR to set up a new user in the [Connection to MEOW](https://purr-docs.jacow.org/Functionalities/connection/)
+
 
 ### Starting supervisord
 
