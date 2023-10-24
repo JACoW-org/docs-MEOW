@@ -65,7 +65,7 @@ python3 -m venv venv
 
 ### Creating PURR/MEOW Shared Authentication Key
 
-To create a shared authentication key for requests from the PURR client to the MEOW server, you will need an API key. The following command creates an API key for the user `purr` and stores it in Redis. You can create different keys for different users.
+To create a shared authentication key for requests from the PURR client to the MEOW server, you will need an API key. The following command creates an API key for the user `purr` on the indico installation at `indico.jacow.org` and stores it in Redis. You can create different keys for different PURR installations, Indico events or even for other software that would use MEOW's APIs.
 
 ```bash
 ./venv/bin/python -m meow auth -login purr@indico.jacow.org
@@ -77,8 +77,7 @@ The output will look like this:
 purr indico.jacow.org <api_key>
 ```
 
-The API is used in PURR to set up a new user in the [Connection to MEOW](https://purr-docs.jacow.org/Functionalities/connection/)
-
+Please take note of this `<api_key>`: it will be needed in the PURR [connection to MEOW](https://purr-docs.jacow.org/Functionalities/connection/) settings of the Indico event.
 
 ### Starting supervisord
 
@@ -89,13 +88,13 @@ The API is used in PURR to set up a new user in the [Connection to MEOW](https:/
 ## Test that MEOW is up and running
 
 ```bash
-curl http://127.0.0.1:8080/api/ping/01HBR3MMP09JVYZ7K3ATYPR00X
+curl http://127.0.0.1:8080/api/ping/<api_key>
 {
-  "method": "ping",
-  "params": {
-    "user": "purr",
-    "host": "indico.jacow.org",
-    "date": "2023-10-02T13:51:08.737960"
-  }
+  "method": "ping",
+  "params": {
+    "user": "purr",
+    "host": "indico.jacow.org",
+    "date": "2023-10-02T13:51:08.737960"
+  }
 }
 ```
