@@ -79,6 +79,28 @@ purr indico.jacow.org <api_key>
 
 Please take note of this `<api_key>`: it will be needed in the PURR [connection to MEOW](https://purr-docs.jacow.org/Functionalities/connection/) settings of the Indico event.
 
+#### Other `meow` useful commands
+
+List keys present in the DB:
+
+```bash
+./venv/bin/python3 -m meow auth -list
+```
+
+Check a key:
+
+```bash
+./venv/bin/python3 -m meow auth -check <api_key>
+purr indico.jacow.org <timestamp>
+```
+
+Remove a key from the DB:
+
+```bash
+./venv/bin/python3 -m meow auth -logout <api_key>
+1
+```
+
 ### Starting supervisord
 
 ```bash
