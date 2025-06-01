@@ -1,7 +1,28 @@
 site_name: JACoW - CAT - MEOW
-theme: material
+theme: 
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: teal
+      toggle:
+          icon: material/brightness-7
+          name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: teal
+      toggle:
+          icon: material/brightness-4
+          name: Switch to light mode
 repo_name: 'jacow-org/docs-MEOW'
 repo_url: 'https://github.com/JACoW-org/docs-MEOW'
+plugins:
+  - privacy
+  - search
+  - open-in-new-tab:
+      add_icon: true
 nav:
   - Introduction: index.md
   - Framework: framework.md
